@@ -1,8 +1,15 @@
-#include<GL/glew.h>
-#include<GLFW/glfw3.h>
-#include<glm/glm.hpp>
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
+#include </opt/homebrew/include/GLFW/glfw3.h>
+#include </opt/homebrew/include/glm/glm.hpp>
+#include </opt/homebrew/include/glm/gtc/matrix_transform.hpp>
+#include </opt/homebrew/include/glm/gtc/type_ptr.hpp>
+#include </opt/homebrew/opt/glew/include/GL/glew.h>
+
+// #include<GL/glew.h>
+// #include<GLFW/glfw3.h>
+// #include<glm/glm.hpp>
+// #include<glm/gtc/matrix_transform.hpp>
+// #include<glm/gtc/type_ptr.hpp>
+
 #include<vector>
 #include <iostream>
 #include<cmath>
