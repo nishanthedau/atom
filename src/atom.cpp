@@ -43,12 +43,62 @@ struct Engine {
         glfwMakeContextCurrent(window);
         glViewport(0, 0, WIDTH, HEIGHT);
     }
+    void run() {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+
+        double halfWidth = WIDTH / 2.0f, halfHeight = HEIGHT / 2.0f;
+        glOrtho(-halfWidth, halfWidth, -halfHeight, halfHeight, -1.0, 1.0);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+    }
+};
+Engine engine;
+
+struct Particle{
+    vec2 position;
+    int charge;
+    Particle(vec2 position, int charge) : position(position), charge(charge){}
+
+    void draw(int segments = 50){
+        float r;
+        if (charge == -1){
+            r = 2;
+            glColor3f(0.0f, 1.0f, 1.0f);
+        }
+        else if (charge == 1){
+            r = 10;
+            glColor3f(1.0f,0.0f,0.0f);
+        }
+        else {
+            glColor3f(0.5f,0.5f,0.5f);
+        }
+
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(position.x, position.y);
+        for(int i =0; i <= segments; i++){
+            float angle = 2.0f * value_PI * i / segments;
+            float x = cos(angle) * r;
+            float y = sin(angle) * r;
+            glVertex2f(x + position.x, y + position.y);
+        }
+        glEnd();
+    }
+};
+vector<Particle> particles{
+    Particle(vec2(0.0f),1),
+    Particle(vec2(-50.0f, 0.0f),-1)
 };
 
-Engine engine;
 
 int main(){
     while (!glfwWindowShouldClose(engine.window)){
+        engine.run();
+        for (Particle p : particles){
+            p.draw();
+        }
 
         glfwSwapBuffers(engine.window);
         glfwPollEvents();
