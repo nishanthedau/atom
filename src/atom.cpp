@@ -23,6 +23,8 @@
 using namespace glm;
 using namespace std;
 
+float orbitDistance = 50.0f;
+
 struct Engine {
 
     GLFWwindow* window;
@@ -60,6 +62,7 @@ Engine engine;
 struct Particle{
     vec2 position;
     int charge;
+    float angle;
     Particle(vec2 position, int charge) : position(position), charge(charge){}
 
     void draw(int segments = 50){
@@ -86,6 +89,10 @@ struct Particle{
         }
         glEnd();
     }
+    void update(){
+        angle += 0.1;
+        position = vec2(cos(angle) * orbitDistance, sin(angle) * orbitDistance);
+    }
 };
 vector<Particle> particles{
     Particle(vec2(0.0f),1),
@@ -96,8 +103,12 @@ vector<Particle> particles{
 int main(){
     while (!glfwWindowShouldClose(engine.window)){
         engine.run();
-        for (Particle p : particles){
+        // here & is imp cuz we want the same to be updated and not a copy of it
+        for (Particle &p : particles){
             p.draw();
+            if (p.charge == -1){
+                p.update();
+            }
         }
 
         glfwSwapBuffers(engine.window);
