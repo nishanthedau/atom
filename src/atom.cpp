@@ -66,6 +66,23 @@ struct Particle{
     Particle(vec2 position, int charge) : position(position), charge(charge){}
 
     void draw(int segments = 50){
+        
+        // for outline circle of electron
+        // check tis, there is a bug where it makes a huge cirlce instead of jst outline,
+        // if (charge == -1){
+        //     glLineWidth(0.4f);
+        //     glBegin(GL_TRIANGLE_FAN);
+        //     glColor3f(0.4f,0.4f,0.4f);
+        //     glVertex2f(position.x, position.y);
+        //     for(int i =0; i <= segments; i++){
+        //         float angle = 2.0f * value_PI * i / segments;
+        //         float x = cos(angle) * orbitDistance;
+        //         float y = sin(angle) * orbitDistance;
+        //         glVertex2f(x + position.x, y + position.y);
+        //     }
+        //     glEnd();
+        // }
+
         float r;
         if (charge == -1){
             r = 2;
@@ -94,23 +111,34 @@ struct Particle{
         position = vec2(cos(angle) * orbitDistance, sin(angle) * orbitDistance);
     }
 };
-vector<Particle> particles{
-    Particle(vec2(0.0f),1),
-    Particle(vec2(-50.0f, 0.0f),-1)
+
+
+struct Atom{
+    vec2 pos;
+    vector<Particle> particles{
+        Particle(pos,1),
+        Particle(pos,-1)
+    };
+    Atom(vec2 pos) : pos(pos){}
 };
 
+vector<Atom> atoms{
+    Atom(vec2(0.0f)),
+    Atom(vec2(-200.0f,0.0f))
+};
 
 int main(){
     while (!glfwWindowShouldClose(engine.window)){
         engine.run();
         // here & is imp cuz we want the same to be updated and not a copy of it
-        for (Particle &p : particles){
-            p.draw();
-            if (p.charge == -1){
-                p.update();
+        for (Atom &a : atoms){
+            for (Particle &p : a.particles){
+                p.draw();
+                if (p.charge == -1){
+                    p.update();
+                }
             }
         }
-
         glfwSwapBuffers(engine.window);
         glfwPollEvents();
     }
